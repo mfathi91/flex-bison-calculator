@@ -1,0 +1,7 @@
+# Flex and Bison files
+*.tab.h
+*.tab.c
+lex.yy.c
+
+# Binary files
+calc

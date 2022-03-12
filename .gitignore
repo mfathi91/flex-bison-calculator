@@ -1,3 +1,5 @@
+# Vim temp files
+*.swp
 # Flex and Bison files
 *.tab.h
 *.tab.c

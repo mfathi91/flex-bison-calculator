@@ -5,6 +5,7 @@
 /* declare tokens */
 %token NUMBER
 %token ADD SUB MUL DIV ABS
+%token LEFT_P RIGHT_P
 %token EOL
 
 %%
@@ -23,8 +24,11 @@ factor: term
  | factor DIV term { $$ = $1 / $3; }
  ;
 
-term: NUMBER
- | ABS term   { $$ = $2 >= 0? $2 : - $2; }
+term: elem
+ | LEFT_P exp RIGHT_P { $$ = $2; }
+
+elem: NUMBER
+ | ABS elem   { $$ = $2 >= 0? $2 : - $2; }
  ;
 
 %%

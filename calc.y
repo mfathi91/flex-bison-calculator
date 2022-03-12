@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+#include <math.h>
 %}
 
 /* declare tokens */
@@ -28,17 +29,17 @@ term: elem
  | LEFT_P exp RIGHT_P { $$ = $2; }
 
 elem: NUMBER
- | ABS elem   { $$ = $2 >= 0? $2 : - $2; }
+ | ABS elem { $$ = $2 >= 0? $2 : - $2; }
  ;
 
 %%
 
-main(int argc, char **argv)
-{
-  yyparse();
+int main(int argc, char **argv) {
+    yyparse();
+    return 0;
 }
 
-yyerror(char *s)
-{
-  fprintf(stderr, "error: %s\n", s);
+int yyerror(char *s) {
+    fprintf(stderr, "Syntax error: %s\n", s);
+    return -1;
 }

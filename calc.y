@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
+int yylex();
+int yyerror(char *s); 
 %}
 
 %union {

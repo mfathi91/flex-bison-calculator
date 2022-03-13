@@ -4,34 +4,72 @@
 #include <math.h>
 %}
 
-/* declare tokens */
-%token NUMBER
-%token ADD SUB MUL DIV ABS
-%token LEFT_P RIGHT_P
-%token EXIT EOL
+%union {
+    int ival;
+    float fval;
+}
+
+/* Declare tokens. */
+%token<ival> INT_NUMBER
+%token<fval> FLOAT_NUMBER
+%token ADD SUB MUL DIV ABS LEFT_P RIGHT_P EXIT EOL
+
+/* Declare types. */
+%type<ival> i_exp i_factor i_term i_elem
+%type<fval> f_exp f_factor f_term f_elem
 
 %%
 
 calclist: /* nothing */
- | calclist exp EOL  { printf("= %d\n", $2); }
- | calclist EXIT EOL { exit(0); }
+ | calclist i_exp EOL { printf("= %d\n", $2); }
+ | calclist f_exp EOL { printf("= %.2f\n", $2); }
+ | calclist EXIT EOL  { exit(0); }
  ;
 
-exp: factor
- | exp ADD factor { $$ = $1 + $3; }
- | exp SUB factor { $$ = $1 - $3; }
+/* Integer operations. */
+i_exp: i_factor
+ | i_exp ADD i_factor { $$ = $1 + $3; }
+ | i_exp SUB i_factor { $$ = $1 - $3; }
  ;
 
-factor: term
- | factor MUL term { $$ = $1 * $3; }
- | factor DIV term { $$ = $1 / $3; }
+i_factor: i_term
+ | i_factor MUL i_term { $$ = $1 * $3; }
+ | i_factor DIV i_term { $$ = $1 / $3; }
  ;
 
-term: elem
- | LEFT_P exp RIGHT_P { $$ = $2; }
+i_term: i_elem
+ | LEFT_P i_exp RIGHT_P { $$ = $2; }
+ ;
 
-elem: NUMBER
- | ABS elem { $$ = $2 >= 0? $2 : - $2; }
+i_elem: INT_NUMBER
+ | ABS i_elem { $$ = $2 >= 0? $2 : - $2; }
+ ;
+
+/* Float operations. */
+f_exp: f_factor
+ | f_exp ADD f_factor { $$ = $1 + $3; }
+ | f_exp ADD i_factor { $$ = $1 + $3; }
+ | i_exp ADD f_factor { $$ = $1 + $3; }
+ | f_exp SUB f_factor { $$ = $1 - $3; }
+ | f_exp SUB i_factor { $$ = $1 - $3; }
+ | i_exp SUB f_factor { $$ = $1 - $3; }
+ ;
+
+f_factor: f_term
+ | f_factor MUL f_term { $$ = $1 * $3; }
+ | f_factor MUL i_term { $$ = $1 * $3; }
+ | i_factor MUL f_term { $$ = $1 * $3; }
+ | f_factor DIV f_term { $$ = $1 / $3; }
+ | f_factor DIV i_term { $$ = $1 / $3; }
+ | i_factor DIV f_term { $$ = $1 / $3; }
+ ;
+
+f_term: f_elem
+ | LEFT_P f_exp RIGHT_P { $$ = $2; }
+ ;
+
+f_elem: FLOAT_NUMBER
+ | ABS f_elem { $$ = $2 >= 0? $2 : - $2; }
  ;
 
 %%

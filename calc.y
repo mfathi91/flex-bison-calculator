@@ -15,8 +15,8 @@
 %token ADD SUB MUL DIV ABS LEFT_P RIGHT_P EXIT EOL
 
 /* Declare types. */
-%type<ival> i_exp i_factor i_term i_elem
-%type<fval> f_exp f_factor f_term f_elem
+%type<ival> i_exp i_factor i_term
+%type<fval> f_exp f_factor f_term
 
 %%
 
@@ -37,12 +37,9 @@ i_factor: i_term
  | i_factor DIV i_term { $$ = $1 / $3; }
  ;
 
-i_term: i_elem
+i_term: INT_NUMBER
  | LEFT_P i_exp RIGHT_P { $$ = $2; }
- ;
-
-i_elem: INT_NUMBER
- | ABS i_elem { $$ = $2 >= 0? $2 : - $2; }
+ | ABS i_term           { $$ = $2 >= 0? $2 : - $2; }
  ;
 
 /* Float operations. */
@@ -64,12 +61,9 @@ f_factor: f_term
  | i_factor DIV f_term { $$ = $1 / $3; }
  ;
 
-f_term: f_elem
+f_term: FLOAT_NUMBER
  | LEFT_P f_exp RIGHT_P { $$ = $2; }
- ;
-
-f_elem: FLOAT_NUMBER
- | ABS f_elem { $$ = $2 >= 0? $2 : - $2; }
+ | ABS f_term { $$ = $2 >= 0? $2 : - $2; }
  ;
 
 %%

@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 %}
 
@@ -7,12 +8,13 @@
 %token NUMBER
 %token ADD SUB MUL DIV ABS
 %token LEFT_P RIGHT_P
-%token EOL
+%token EXIT EOL
 
 %%
 
 calclist: /* nothing */
- | calclist exp EOL { printf("= %d\n", $2); }
+ | calclist exp EOL  { printf("= %d\n", $2); }
+ | calclist EXIT EOL { exit(0); }
  ;
 
 exp: factor
@@ -40,6 +42,6 @@ int main(int argc, char **argv) {
 }
 
 int yyerror(char *s) {
-    fprintf(stderr, "Syntax error: %s\n", s);
+    fprintf(stderr, "Error: %s\n", s);
     return -1;
 }

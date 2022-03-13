@@ -11,6 +11,8 @@
 "("            { return LEFT_P; }
 ")"            { return RIGHT_P; }
 "|"            { return ABS; }
+"ln"           { return LN; }
+"log"          { return LOG; }
 [0-9]+         { yylval.ival = atoi(yytext); return INT_NUMBER; }
 [0-9]+\.[0-9]+ { yylval.fval = atof(yytext); return FLOAT_NUMBER; }
 \n             { return EOL; }

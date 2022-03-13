@@ -12,7 +12,7 @@
 /* Declare tokens. */
 %token<ival> INT_NUMBER
 %token<fval> FLOAT_NUMBER
-%token ADD SUB MUL DIV ABS LEFT_P RIGHT_P EXIT EOL
+%token ADD SUB MUL DIV ABS LN LOG LEFT_P RIGHT_P EXIT EOL
 
 /* Declare types. */
 %type<ival> i_exp i_factor i_term
@@ -63,7 +63,11 @@ f_factor: f_term
 
 f_term: FLOAT_NUMBER
  | LEFT_P f_exp RIGHT_P { $$ = $2; }
- | ABS f_term { $$ = $2 >= 0? $2 : - $2; }
+ | LN f_term             { $$ = log($2); }
+ | LN i_term             { $$ = log($2); }
+ | LOG f_term            { $$ = log10($2); }
+ | LOG i_term            { $$ = log10($2); }
+ | ABS f_term           { $$ = $2 >= 0? $2 : - $2; }
  ;
 
 %%

@@ -16,6 +16,7 @@
 "sin"          { return SIN; }
 "cos"          { return COS; }
 "tan"          { return TAN; }
+"pow"          { return POW; }
 [0-9]+         { yylval.ival = atoi(yytext); return INT_NUMBER; }
 [0-9]+\.[0-9]+ { yylval.fval = atof(yytext); return FLOAT_NUMBER; }
 \n             { return EOL; }

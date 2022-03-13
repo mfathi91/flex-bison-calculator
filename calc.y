@@ -34,7 +34,6 @@ i_exp: i_factor
 
 i_factor: i_term
  | i_factor MUL i_term { $$ = $1 * $3; }
- | i_factor DIV i_term { $$ = $1 / $3; }
  ;
 
 i_term: INT_NUMBER
@@ -60,6 +59,7 @@ f_factor: f_term
  | f_factor DIV f_term { $$ = $1 / $3; }
  | f_factor DIV i_term { $$ = $1 / $3; }
  | i_factor DIV f_term { $$ = $1 / $3; }
+ | i_factor DIV i_term { $$ = (float)$1 / $3; }
  ;
 
 f_term: FLOAT_NUMBER
